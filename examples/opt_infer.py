@@ -14,6 +14,7 @@ def main(args):
                                               padding_side="left")
     generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
     generator.model = deepspeed.init_inference(generator.model,
+                                               config=args.conf_path,
                                                checkpoint=None,
                                                replace_with_kernel_inject=True)
     output = generator('DeepSpeed is', do_sample=True, min_length=10)
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str)
     parser.add_argument('--local_rank', type=int,  default=0)
+    parser.add_argument('--conf_path', type=str,  default=None)
     args = parser.parse_args()
     main(args)
 

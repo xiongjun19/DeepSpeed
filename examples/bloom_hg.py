@@ -48,6 +48,7 @@ train_batch_size = 1
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16)
 
 model = model.eval()
+model = model.to("cuda")
 
 
 ### Generate
