@@ -10,12 +10,10 @@ from transformers import AutoTokenizer
 
 def main(args):
     model = load_model(args.model_path)
-    tokenizer = AutoTokenizer.from_pretrained("facebook/opt-66b", 
-                                              padding_side="left")    
-    generator = pipeline('text-generation', model=model, tokenizer=tokenizer
-                         ,device=args.local_rank)
+    tokenizer = AutoTokenizer.from_pretrained("facebook/opt-66b",
+                                              padding_side="left")
+    generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
     generator.model = deepspeed.init_inference(generator.model,
-                                               mp_size=4, dtype=torch.half,
                                                checkpoint=None,
                                                replace_with_kernel_inject=True)
     output = generator('DeepSpeed is', do_sample=True, min_length=10)

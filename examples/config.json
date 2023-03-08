@@ -1,0 +1,10 @@
+{
+	"zero_optimization": {
+		"stage": 3, 
+		"offload_param": {
+			"device": "cpu"
+		}
+	},
+	"dtype": "torch.half"
+}
+
