@@ -1,5 +1,6 @@
 # coding=utf8
 
+import os
 import torch
 import deepspeed
 import argparse
@@ -11,7 +12,6 @@ local_rank = int(os.getenv("LOCAL_RANK", "0"))
 world_size = int(os.getenv("WORLD_SIZE", "1"))
 
 deepspeed.init_distributed("nccl")
-rank = dist.get_rank()
 
 
 def print_rank0(*msg):
@@ -53,8 +53,8 @@ def main(args):
 
     generator.model = deepspeed.init_inference(generator.model,
                                                config=ds_config,
-                                               checkpoint=None,
-                                               replace_with_kernel_inject=True)
+                                               checkpoint=None)
+                                               # replace_with_kernel_inject=True)
     output = generator('DeepSpeed is', do_sample=True, min_length=10)
     print("output is: ")
     print(output)
