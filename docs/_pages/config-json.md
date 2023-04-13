@@ -692,7 +692,7 @@ Configuring the asynchronous I/O module for offloading parameter and optimizer s
 
 | Description                                                                                                               | Default |
 |---------------------------------------------------------------------------------------------------------------------------| ------- |
-| Whether to run autotuing experiments whose results already exist. Setting it to true would overwrite the existing result. | `false` |
+| Whether to run autotuning experiments whose results already exist. Setting it to true would overwrite the existing result. | `false` |
 
 
 <i>**metric**</i>: [string]
@@ -849,7 +849,7 @@ Configuring the asynchronous I/O module for offloading parameter and optimizer s
 
 | Description                                                   | Default |
 | ------------------------------------------------------------- | ------- |
-| Inserts torch.cuda.synchronize() at each checkpoint boundary. | `false` |
+| Inserts get_accelerator().synchronize() at each checkpoint boundary. | `false` |
 
 
 <i>**profile**</i>: [boolean]
