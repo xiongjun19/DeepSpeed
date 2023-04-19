@@ -6,7 +6,7 @@ from torch import nn
 from typing import Optional
 from typing import Union
 from transformers.configuration_utils import PretrainedConfig
-from transformers import OPTForCausalLM 
+from transformers import OPTForCausalLM
 
 
 ENV_VARS_TRUE_VALUES = {"1", "ON", "YES", "TRUE"}

@@ -5,12 +5,13 @@ import math
 import os
 import torch
 import time
-from utils import DSPipeline
+from utils_fake import DSPipeline
 from deepspeed.runtime.utils import see_memory_usage
 
 parser = ArgumentParser()
 
 parser.add_argument("--name", required=True, type=str, help="model_name")
+parser.add_argument("--model_path", required=True, type=str, help="path to the model")
 parser.add_argument("--checkpoint_path", required=False, default=None, type=str, help="model checkpoint path")
 parser.add_argument("--save_mp_checkpoint_path", required=False, default=None, type=str, help="save-path to store the new model checkpoint")
 parser.add_argument("--batch_size", default=1, type=int, help="batch size")
@@ -58,6 +59,7 @@ if local_rank == 0:
 
 t0 = time.time()
 pipe = DSPipeline(model_name=args.name,
+                  model_path=args.model_path,
                   dtype=data_type,
                   is_meta=args.use_meta_tensor,
                   device=args.local_rank,
