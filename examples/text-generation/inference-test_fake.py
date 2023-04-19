@@ -49,6 +49,35 @@ def print_perf_stats(latency_set, config, warmup=3):
         print("Avg BW: {0:8.2f} GB/s".format(1/avg * num_parameters * num_bytes / 1e9))
         print("Avg flops: {0:8.2f} TFlops/s".format(1/avg * num_parameters * num_bytes * args.batch_size / 1e12))
 
+
+model_hidden_size = 12288
+
+
+ds_config = {
+    "fp16": {
+        "enabled": True,
+    },
+    "zero_optimization": {
+        "stage": 3,
+        "overlap_comm": True,
+        "contiguous_gradients": True,
+        "reduce_bucket_size": model_hidden_size * model_hidden_size,
+        "stage3_prefetch_bucket_size": 0.9 * model_hidden_size * model_hidden_size,
+        "stage3_param_persistence_threshold": 0,
+        "offload_param":{
+            "device": "cpu",
+            "pin_memory": True,
+        }
+
+    },
+    "steps_per_print": 2000,
+    "train_batch_size": 20,
+    "train_micro_batch_size_per_gpu": 1,
+    "wall_clock_breakdown": False,
+}
+
+
+
 world_size = int(os.getenv('WORLD_SIZE', '1'))
 local_rank = int(os.getenv('LOCAL_RANK', '0'))
 
@@ -74,6 +103,7 @@ else:
 
 if args.ds_inference:
     pipe.model = deepspeed.init_inference(pipe.model,
+                                    config=ds_config,
                                     dtype=data_type,
                                     mp_size=world_size,
                                     replace_with_kernel_inject=args.use_kernel,
